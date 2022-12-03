@@ -1,0 +1,40 @@
+@startuml as_is
+title AS IS
+
+skinparam componentStyle uml2
+actor Client
+node "nginx" as nginx
+package "Auth" {
+    node "Auth Flask"{
+        component "endpoints: \n auth\n user\n role\n openapi" as endpoints_auth           
+    }
+}
+package "UGC" {
+    skinparam packageStyle rectangle
+    package "OLTP" {
+        node "Service API"{
+            component "endpoints: \n movies_timestamp" as timestamp           
+        }
+        node "Streaming Kafka" as kafka
+    }
+    node "ETL" as etl
+    package "OLAP" {
+        node "Zookeeper" as zookeeper
+        node "shard 1 \nreplica 1" as node1
+        node "shard 2 \nreplica 1" as node2
+        node "shard 1 \nreplica 2" as node3
+        node "shard 2 \nreplica 2" as node4
+    }
+} 
+Client -down- nginx
+nginx -down-> timestamp
+timestamp -right-> kafka
+timestamp <-> endpoints_auth
+kafka -down-> etl
+etl -down-> zookeeper
+zookeeper <-left-> node1
+zookeeper <-right-> node2
+zookeeper <-down-> node3
+zookeeper <-down-> node4
+
+@enduml 

@@ -1,0 +1,59 @@
+@startuml as_is
+title AS IS
+
+skinparam componentStyle uml2
+actor Users
+actor Admin
+node "nginx" as nginx
+package "Admin Panel" {
+    node "Admin Django" as Django{
+        component "Admin views" as d_views
+        component "Django ORM" as d_orm            
+    }
+    database "movies Postgresql" as Postgre {    
+        component "Tabels: \n film_work\n genre\n genre_film_work\n person\n person_film_work\n" as tables
+    }    
+}
+package "Search" {
+    database "search Elasticsearch" as Elastic {    
+        component "Indexs: \n movies\n genres\n persons" as indexs
+        interface "API" as api_search
+    }
+    node "etl-pipeline"{
+        component "extraction from a relational DB and load into a search DB" as etl          
+    }
+}
+package "Async API" {
+    node "FastApi"{
+        component "endpoints: \n movies\n genres\n persons\n openapi" as endpoints_api
+        component "services endpoints" as service_api           
+    }
+    node "Cache Redis" as api_redis
+}
+package "Auth" {
+    node "Auth Flask"{
+        component "endpoints: \n auth\n user\n role\n openapi" as endpoints_auth           
+    }
+    node "Storage_jvt Redis" as auth_redis
+    database "Postgresql" as Postgre_auth {    
+        component "Tabels: \n user\n role\n login_history" as tables_auth
+    }
+    cloud "AUTH 2.0\n Yandex\n VK"  as auth_2
+}      
+Users -down- nginx
+Admin -down- nginx
+d_orm -down-> tables
+nginx <-down-> d_views
+tables -right-> etl
+etl -up-> indexs
+nginx <-down-> endpoints_api
+endpoints_api <-down- service_api
+service_api <- api_search
+service_api <-down- api_redis
+nginx <-down-> endpoints_auth
+endpoints_auth <-down-> tables_auth
+endpoints_auth <-down-> auth_redis
+auth_2 -> endpoints_auth
+service_api <-> endpoints_auth
+
+@enduml 
