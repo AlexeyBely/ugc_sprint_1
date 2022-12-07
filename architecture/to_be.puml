@@ -31,10 +31,13 @@ nginx -down-> timestamp
 timestamp -right-> kafka
 timestamp <-> endpoints_auth
 kafka -down-> etl
-etl -down-> zookeeper
+etl -down-> node1
 zookeeper <-left-> node1
-zookeeper <-right-> node2
+zookeeper <-up-> node2
 zookeeper <-down-> node3
 zookeeper <-down-> node4
+node1 -> node2
+node1 -> node3
+node1 -> node4
 
 @enduml 
