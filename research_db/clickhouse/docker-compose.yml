@@ -45,10 +45,3 @@ services:
     depends_on:
       - zookeeper
 
-  vertica:
-    image: jbfavre/vertica:latest 
-    container_name: vertica
-    hostname: vertica
-    ports:
-      - "5433:5433"
-
