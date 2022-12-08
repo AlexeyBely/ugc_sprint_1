@@ -18,6 +18,7 @@ sql_querys = [
     ('SELECT count() FROM movies.frames', True),
     ('SELECT user_id, uniq(movie_id) FROM movies.frames WHERE frame > 100 GROUP by user_id', False),
     ('SELECT movie_id, min(frame), max(frame) FROM movies.frames GROUP by movie_id', False),
+    ('SELECT count() FROM movies.frames', True),
 ]
 
 if __name__ == '__main__':
