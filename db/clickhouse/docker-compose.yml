@@ -45,3 +45,8 @@ services:
     depends_on:
       - zookeeper_ch
 
+networks:
+  default:
+    name: movies_networks
+    external: true
+
