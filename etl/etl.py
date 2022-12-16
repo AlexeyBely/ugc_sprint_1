@@ -19,11 +19,6 @@ class Etl:
         self.consumer = Consumer(KAFKA_SERVERS, KAFKA_TOPIC, KAFKA_CONSUMER_GROUP)
         self.click_house = ClickHouseClient(CH_HOST, CH_TABLE)
 
-    @staticmethod
-    def _parse_key(key):
-        key = key.decode('utf-8')
-        return key.split('+')
-
     def execute(self):
         values_backup = []
         values: list = []
@@ -42,13 +37,13 @@ class Etl:
                         values = []
                         flush_start = time.time()
             except clickhouse_driver.errors.Error as e:
-                LOGGER.error(f'Error connecting ClickHouse: {e}')
+                LOGGER.error(f"Error connecting ClickHouse: {e}")
             except kafka.errors.KafkaError as e:
-                LOGGER.error(f'Ошибка в соединении с Kafka: {e}')
+                LOGGER.error(f"Ошибка в соединении с Kafka: {e}")
             finally:
                 values_backup = values
 
 
-if __name__ == '__main__':
-    LOGGER.info('Start ETL')
+if __name__ == "__main__":
+    LOGGER.info("Start ETL")
     Etl().execute()

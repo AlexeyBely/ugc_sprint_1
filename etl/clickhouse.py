@@ -1,9 +1,8 @@
 from datetime import datetime
+import logging
 
 from clickhouse_driver import Client
-from clickhouse_driver.errors import Error
 
-import logging
 
 LOGGER = logging.getLogger(__name__)
 
@@ -16,6 +15,7 @@ class ClickHouseClient:
         self.client = self.client()
 
     def client(self):
+        LOGGER.info("Start ClickHouse client")
         return Client.from_url(self.host)
 
     @staticmethod
