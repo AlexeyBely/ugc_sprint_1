@@ -14,14 +14,14 @@ class Consumer:
         self.topic = topic
         self.group_id = group_id
         self.auto_commit = auto_commit
-
-    def fetch(self):
-        consumer = KafkaConsumer(
+        self.consumer = KafkaConsumer(
             self.topic,
             bootstrap_servers=self.hosts,
             group_id=self.group_id,
             enable_auto_commit=self.auto_commit,
             auto_offset_reset='earliest',
         )
-        for message in consumer:
+
+    def fetch(self):
+        for message in self.consumer:
             yield message
