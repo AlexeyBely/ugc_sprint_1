@@ -1,5 +1,6 @@
 from datetime import datetime
 import logging
+import random
 
 from clickhouse_driver import Client
 
@@ -19,13 +20,16 @@ class ClickHouseClient:
         return Client.from_url(self.host)
 
     @staticmethod
-    def transform(value: dict) -> dict:
+    def transform(value: bytes, key: bytes) -> dict:
         """Transform Kafka record into ClickHouse format."""
+        key_kafka: str = key.decode('UTF-8')
+        user_movie_ids = key_kafka.split('+')
         record = {}
         try:
-            record["user_id"] = str(value.get("user_id"))
-            record["movie_id"] = str(value.get("movie_id"))
-            record["frame"] = int(value.get("frame"))
+            record["id"] = random.randrange(0, 10000000000, 9)
+            record["user_id"] = user_movie_ids[0]
+            record["movie_id"] = user_movie_ids[1]
+            record["frame"] = int(value)
             record["event_time"] = datetime.now()
             return record
         except Exception as e:

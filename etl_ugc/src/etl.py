@@ -1,6 +1,7 @@
 import json
 import time
 import logging
+import logging.config
 
 import clickhouse_driver.errors
 import kafka.errors
@@ -9,7 +10,9 @@ from clickhouse import ClickHouseClient
 from kafka_consumer import Consumer
 
 from config.settings import CH_HOST, CH_TABLE, KAFKA_TOPIC, KAFKA_CONSUMER_GROUP, KAFKA_SERVERS, FLUSH_SECONDS, FLUSH_COUNT
+from config.cfg import LOGGING
 
+logging.config.dictConfig(LOGGING)
 LOGGER = logging.getLogger(__name__)
 
 
@@ -27,8 +30,8 @@ class Etl:
                 values = values_backup
                 flush_start = time.time()
                 for record in self.consumer.fetch():
-                    value = json.loads(record.value)
-                    values.append(self.click_house.transform(value))
+#                    value = json.loads(record.value)
+                    values.append(self.click_house.transform(record.value, record.key))
                     if len(values) >= FLUSH_COUNT or (time.time() - flush_start) >= FLUSH_SECONDS:
                         res = self.click_house.load(values)
                         # if load fails, will try next time

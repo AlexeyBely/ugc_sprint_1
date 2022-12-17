@@ -11,6 +11,14 @@ services:
     env_file:
       - ./.env
 
+  etl_ugc:
+    build: ./etl_ugc
+    container_name: etl_ugc
+    entrypoint: >
+      sh -c "python etl.py"
+    env_file:
+      - ./.env
+
   nginx:
     image: nginx:latest
     container_name: nginx
