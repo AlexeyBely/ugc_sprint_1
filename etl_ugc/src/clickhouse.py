@@ -1,6 +1,6 @@
 from datetime import datetime
 import logging
-import random
+import uuid
 
 from clickhouse_driver import Client
 
@@ -26,7 +26,7 @@ class ClickHouseClient:
         user_movie_ids = key_kafka.split('+')
         record = {}
         try:
-            record["id"] = random.randrange(0, 10000000000, 9)
+            record["id"] = uuid.uuid4()
             record["user_id"] = user_movie_ids[0]
             record["movie_id"] = user_movie_ids[1]
             record["frame"] = int(value)

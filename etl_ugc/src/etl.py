@@ -30,7 +30,6 @@ class Etl:
                 values = values_backup
                 flush_start = time.time()
                 for record in self.consumer.fetch():
-#                    value = json.loads(record.value)
                     values.append(self.click_house.transform(record.value, record.key))
                     if len(values) >= FLUSH_COUNT or (time.time() - flush_start) >= FLUSH_SECONDS:
                         res = self.click_house.load(values)
@@ -42,7 +41,7 @@ class Etl:
             except clickhouse_driver.errors.Error as e:
                 LOGGER.error(f"Error connecting ClickHouse: {e}")
             except kafka.errors.KafkaError as e:
-                LOGGER.error(f"Ошибка в соединении с Kafka: {e}")
+                LOGGER.error(f"Error connecting Kafka: {e}")
             finally:
                 values_backup = values
 
