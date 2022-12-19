@@ -1,12 +1,13 @@
 from aiokafka import AIOKafkaProducer
 
-from api.v1.response_models import Response
+from models.response_models import Response
 from services_base.base_movie import BaseMovieService
 from db.db_kafka import NAME_TOPIC_FRAME
 
 
 
 class KafkaMovieService(BaseMovieService):
+    """Load to kafka."""
     def __init__(self, producer: AIOKafkaProducer):
         self.producer = producer
     
