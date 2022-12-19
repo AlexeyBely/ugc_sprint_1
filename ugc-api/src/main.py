@@ -32,3 +32,4 @@ async def shutdown():
 
 
 app.include_router(frame.router, prefix='/ugc/api/v1/frame', tags=['frame'])
+

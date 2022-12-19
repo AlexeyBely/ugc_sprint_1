@@ -22,7 +22,7 @@ if __name__ == '__main__':
     counter: int = 0
     for i in range(1, 10000001):
         data = {
-            'id': i,
+            'id': uuid.uuid4(),
             'user_id': random.choice(user_ids),
             'movie_id': random.choice(movie_ids),
             'frame': random.randint(1, 200),
