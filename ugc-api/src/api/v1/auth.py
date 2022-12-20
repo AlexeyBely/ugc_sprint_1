@@ -11,13 +11,14 @@ from models.auth_models import TokenData
 http_scheme = HTTPBearer()
 router = APIRouter()
 
+
 async def authenticate(credentials: HTTPBearer = Depends(http_scheme)) -> TokenData:
     try:
         Jwt_token = credentials.credentials.encode('UTF-8')
         payload = jwt.decode(
             Jwt_token,
             api_settings.access_token_secret_key,
-            algorithms=[api_settings.token_algoritm]
+            algorithms=[api_settings.token_algoritm],
         )
         token_data = TokenData(**payload)
     except JWTError as e:

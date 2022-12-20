@@ -15,16 +15,17 @@ app = FastAPI(
     openapi_url='/ugc/api/openapi.json',
     default_response_class=ORJSONResponse,
     description='Сервис загрузки в kafka',
-    version='1.0.1'
+    version='1.0.1',
 )
 
 
 @app.on_event('startup')
 async def startup():
     db_kafka.db_producer = AIOKafkaProducer(
-        bootstrap_servers = f'{api_settings.kafka_host}:{api_settings.kafka_port}'
+        bootstrap_servers=f'{api_settings.kafka_host}:{api_settings.kafka_port}'
     )
     await db_kafka.db_producer.start()
+
 
 @app.on_event('shutdown')
 async def shutdown():
@@ -32,4 +33,3 @@ async def shutdown():
 
 
 app.include_router(frame.router, prefix='/ugc/api/v1/frame', tags=['frame'])
-

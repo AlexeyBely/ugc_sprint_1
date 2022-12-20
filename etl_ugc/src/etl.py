@@ -9,7 +9,7 @@ import kafka.errors
 from clickhouse import ClickHouseClient
 from kafka_consumer import Consumer
 
-from config.settings import CH_HOST, CH_TABLE, KAFKA_TOPIC, KAFKA_CONSUMER_GROUP, KAFKA_SERVERS, FLUSH_SECONDS, FLUSH_COUNT
+from config.settings import etl_settings as sett
 from config.cfg import LOGGING
 
 logging.config.dictConfig(LOGGING)
@@ -19,8 +19,15 @@ LOGGER = logging.getLogger(__name__)
 class Etl:
 
     def __init__(self):
-        self.consumer = Consumer(KAFKA_SERVERS, KAFKA_TOPIC, KAFKA_CONSUMER_GROUP)
-        self.click_house = ClickHouseClient(CH_HOST, CH_TABLE)
+        self.consumer = Consumer(
+            sett.KAFKA_SERVERS,
+            sett.KAFKA_TOPIC,
+            sett.KAFKA_CONSUMER_GROUP
+        )
+        self.click_house = ClickHouseClient(
+            sett.CH_HOST,
+            sett.CH_TABLE
+        )
 
     def execute(self):
         values_backup = []
@@ -31,7 +38,7 @@ class Etl:
                 flush_start = time.time()
                 for record in self.consumer.fetch():
                     values.append(self.click_house.transform(record.value, record.key))
-                    if len(values) >= FLUSH_COUNT or (time.time() - flush_start) >= FLUSH_SECONDS:
+                    if len(values) >= sett.FLUSH_COUNT or (time.time() - flush_start) >= sett.FLUSH_SECONDS:
                         res = self.click_house.load(values)
                         # if load fails, will try next time
                         if not res:
