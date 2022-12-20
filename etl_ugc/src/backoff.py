@@ -12,24 +12,24 @@ def backoff(
         start_sleep_time: float = 0.1,
         factor: int = 2,
         border_sleep_time: float = 10.0,
+        retries_with_max_timeout: int = 5,
         logger=LOGGER,
+
 ):
     """
     Rerun wrapped function after some time in case of error.
-    Rerun time exponentially (factor) increases up to border time (border_sleep_time)
+    Rerun time exponentially (factor) increases up to max time (border_sleep_time)
     :logger: LOGGER object
     :start_sleep_time: start rerun time
     :factor: increase sleep time in <factor> times
     :border_sleep_time: max rerun time
     """
-
     def func_wrapper(func):
         @wraps(func)
         def inner(*args, **kwargs):
             sleep_time = start_sleep_time
             n = 0
             flag = True
-            retries_with_max_timeout = 0
             while flag:
                 try:
                     return func(*args, **kwargs)
@@ -42,7 +42,7 @@ def backoff(
                     n += 1
                     if sleep_time == border_sleep_time:
                         max_timeout_attempts += 1
-                        if max_timeout_attempts >= retries_with_max_timeout:
+                        if max_timeout_attempts > retries_with_max_timeout:
                             logger.error('max number of connection attempts has reached, quit')
                             flag = False
         return inner
