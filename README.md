@@ -1,4 +1,5 @@
 # Проектная работа 8 спринта
+адрес репозитория [ugc_sprint_1](https://github.com/AlexeyBely/ugc_sprint_1)
 
 ## Состав проекта
 
@@ -30,5 +31,5 @@
 - PlantUML
 
 ## Над проектом работали
-- Алексей Белоглазов [@AlexeyBely](https://github.com/AlexeyBely)
+- Алексей Белоглазов (тимлид) [@AlexeyBely](https://github.com/AlexeyBely)
 - Андрей Гуляйко [@gulyayko](https://github.com/gulyayko)
