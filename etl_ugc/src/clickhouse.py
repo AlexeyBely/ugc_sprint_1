@@ -3,6 +3,7 @@ import logging
 import uuid
 
 from clickhouse_driver import Client
+from backoff import backoff
 
 
 LOGGER = logging.getLogger(__name__)
@@ -36,6 +37,7 @@ class ClickHouseClient:
             LOGGER.error(f"Error while preparing the message: {e}")
             raise
 
+    @backoff()
     def load(self, values: list) -> bool:
         try:
             self.client.execute(f"INSERT INTO {self.table} VALUES", values, types_check=True)

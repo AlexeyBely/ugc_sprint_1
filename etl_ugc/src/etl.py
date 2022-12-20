@@ -1,6 +1,4 @@
-import json
 import time
-import logging
 import logging.config
 
 import clickhouse_driver.errors
@@ -38,6 +36,7 @@ class Etl:
                             continue
                         values = []
                         flush_start = time.time()
+                        self.consumer.consumer.commit()
             except clickhouse_driver.errors.Error as e:
                 LOGGER.error(f"Error connecting ClickHouse: {e}")
             except kafka.errors.KafkaError as e:
