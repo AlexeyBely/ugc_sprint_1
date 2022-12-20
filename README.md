@@ -1,5 +1,5 @@
 # Проектная работа 8 спринта
-адрес репозитория [ugc_sprint_1](https://github.com/AlexeyBely/ugc_sprint_1)
+Репозиторий с работой [ugc_sprint_1](https://github.com/AlexeyBely/ugc_sprint_1)
 
 ## Состав проекта
 
