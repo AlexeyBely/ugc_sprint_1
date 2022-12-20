@@ -1,11 +1,12 @@
-import os
+from pydantic import BaseSettings
 
-CH_HOST = os.environ.get('CH_HOST', default='clickhouse://clickhouse-node1')
-CH_TABLE = os.environ.get('CH_TABLE', default='movies.frames')
+class EtlSettings(BaseSettings):
+    CH_HOST: str = 'clickhouse://clickhouse-node1'
+    CH_TABLE: str = 'movies.frames'
+    KAFKA_TOPIC: str = 'movies-frames'
+    KAFKA_CONSUMER_GROUP: str = 'echo-messages-to-stdout'
+    KAFKA_SERVERS: str = 'localhost:9092'
+    FLUSH_SECONDS: float = 30
+    FLUSH_COUNT: int = 1000
 
-KAFKA_TOPIC = os.environ.get('KAFKA_TOPIC', default='movies-frames')
-KAFKA_CONSUMER_GROUP = os.environ.get('KAFKA_CONSUMER_GROUP', default='echo-messages-to-stdout')
-KAFKA_SERVERS = os.environ.get('KAFKA_SERVERS', default=['localhost:9092'])
-
-FLUSH_SECONDS = float(os.environ.get('FLUSH_SECONDS', default='30'))
-FLUSH_COUNT = int(os.environ.get('FLUSH_COUNT', default='1000'))
+etl_settings = EtlSettings()

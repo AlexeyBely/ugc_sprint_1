@@ -11,7 +11,7 @@ class ApiSettings(BaseSettings):
     kafka_host: str = 'localhost'
     kafka_port: int = 9092
     access_token_secret_key: str = '256-bit-secret-key-1'
-    token_algoritm: str = 'HS256'    
+    token_algoritm: str = 'HS256'
 
 
 api_settings = ApiSettings()
